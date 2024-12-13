@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงเวลาการทำงาน</title>
+    <style>
+        body {
+            font-family: 'Courier New', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom, #001d3d, #003566, #001845);
+            color: #e0e1dd;
+        }
+
+        .container {
+            width: 300px;
+            padding: 20px;
+            background: #0a192f;
+            border: 2px solid #64ffda;
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(0, 128, 128, 0.5);
+            text-align: center;
+        }
+
+        .time {
+            font-size: 32px;
+            font-weight: bold;
+            color: #64ffda;
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 16px;
+            color: #ccd6f6;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #64ffda;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #112240;
+            color: #e0e1dd;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #0a192f;
+            background-color: #64ffda;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #52e0c4;
+            transform: scale(1.05);
+        }
+
+        button:last-child {
+            background-color: #0077b6;
+        }
+
+        button:last-child:hover {
+            background-color: #005f99;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function updateTime() {
+            const timeElement = document.querySelector('.time');
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            timeElement.textContent = `${displayHours}:${minutes} ${ampm}`;
+        }
+
+        function submitTime() {
+            const employeeId = document.querySelector('#employee-id').value;
+            if (employeeId.trim() === "") {
+                alert("กรุณากรอกรหัสพนักงาน");
+                return;
+            }
+            document.querySelector('#main-screen').classList.add('hidden');
+            document.querySelector('#confirmation-screen').classList.remove('hidden');
+            document.querySelector('#confirmation-id').textContent = employeeId;
+        }
+
+        function goBack() {
+            document.querySelector('#confirmation-screen').classList.add('hidden');
+            document.querySelector('#main-screen').classList.remove('hidden');
+        }
+
+        setInterval(updateTime, 1000);
+        window.onload = updateTime;
+    </script>
+</head>
+<body>
+    <div id="main-screen" class="container">
+        <div class="time">08:15 AM.</div>
+        <div class="label">กรอกรหัสพนักงาน</div>
+        <input type="text" id="employee-id" placeholder="กรอกรหัสพนักงาน" />
+        <button onclick="submitTime()">ลงเวลา</button>
+        <button>ย้อนกลับ</button>
+    </div>
+
+    <div id="confirmation-screen" class="container hidden">
+        <div class="time">08:15 AM.</div>
+        <div class="label">ยืนยันการลงเวลา</div>
+        <div id="confirmation-id" class="label">&lt;employee_id&gt;</div>
+        <button onclick="goBack()">ย้อนกลับ</button>
+    </div>
+</body>
+</html>
